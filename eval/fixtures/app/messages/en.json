@@ -1,0 +1,6 @@
+{
+  "home": {
+    "title": "Welcome to the shop",
+    "cartSummary": "You have {count, plural, one {# item} other {# items}} in your cart"
+  }
+}

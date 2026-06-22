@@ -1,0 +1,18 @@
+{
+  "name": "parrot-acceptance-fixture",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Minimal Next.js 16 App-Router fixture for parrot's acceptance test (PLAN §5). Source-only: parrot reads/writes these files; a full Next install/boot is the ADDITIVE sandbox path (E4), NOT the $0 merge gate (D15). One hardcoded string is planted; pl.json has a deliberate missing plural category.",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^16.0.0",
+    "next-intl": "^4.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

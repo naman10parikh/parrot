@@ -1,0 +1,6 @@
+{
+  "home": {
+    "title": "مرحبًا بك في المتجر",
+    "cartSummary": "لديك {count, plural, zero {لا منتجات} one {منتج واحد} two {منتجان} few {# منتجات} many {# منتجًا} other {# منتج}} في سلتك"
+  }
+}

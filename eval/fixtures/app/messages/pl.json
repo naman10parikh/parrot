@@ -1,0 +1,6 @@
+{
+  "home": {
+    "title": "Witaj w sklepie",
+    "cartSummary": "Masz {count, plural, one {# produkt} other {# produktów}} w koszyku"
+  }
+}
