@@ -1,0 +1,55 @@
+{
+  "name": "parrot",
+  "version": "0.1.0",
+  "description": "The i18n/l10n employee — wires next-intl, finds hardcoded strings, validates ICU plurals + RTL + hreflang in CI. Plumbing, not copywriting.",
+  "type": "module",
+  "bin": {
+    "parrot": "./bin/parrot"
+  },
+  "main": "./dist/cli/index.js",
+  "types": "./dist/cli/index.d.ts",
+  "files": [
+    "bin/",
+    "dist/",
+    "skills/",
+    "brain/",
+    "README.md",
+    "AGENTS.md",
+    "llms.txt",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "parrot": "node bin/parrot",
+    "prepublishOnly": "pnpm build && pnpm test"
+  },
+  "keywords": [
+    "i18n",
+    "l10n",
+    "internationalization",
+    "localization",
+    "next-intl",
+    "icu",
+    "messageformat",
+    "rtl",
+    "hreflang",
+    "claude",
+    "agent",
+    "energy"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  }
+}

@@ -26,4 +26,7 @@ vault/Untitled*.base
 # parrot brain BM25 index — derived cache, self-rebuilds when stale (A4)
 brain/.brain-index.json
 
+# parrot CLI compiled output — derived from src/ via `pnpm build` (B2)
+dist/
+
 .env

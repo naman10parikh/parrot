@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+// parrot CLI launcher (B2). Thin shim → the compiled entrypoint. Run `pnpm build` to produce dist/.
+import { main } from "../dist/cli/index.js";
+
+main(process.argv).catch((err) => {
+  process.stderr.write(`parrot: ${err instanceof Error ? err.message : String(err)}\n`);
+  process.exit(1);
+});
