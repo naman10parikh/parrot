@@ -1,0 +1,14 @@
+{
+  "id": "GT-11",
+  "source": "S5",
+  "jtbd": 7,
+  "level": "L3",
+  "blocking": false,
+  "title": "Typed-keys TS2590 at scale → selector API + namespace split, not 'increase tsc memory'",
+  "gate": "typed-keys TS2590 at scale → recommends selector API + namespace split (not 'increase tsc memory'); explains the 2026 invalidation.",
+  "probe": null,
+  "judge": "trajectory",
+  "expected": "Fully-typed t('a.b.c') over a large catalog breaks tsc itself (TS2590, Map-size RangeError) and OOMs ESLint — 'type all your keys' was the 2024-2025 default that 2026 invalidated at scale. For a large catalog use the selector API + split namespaces into multiple files (first-class in next-intl since 2026) + skipLibCheck/KeyPrefix. Small app → typed keys are fine. Warn about the scaling cliff; do NOT just increase tsc memory.",
+  "mustInclude": ["selector API", "namespace", "TS2590", "scale"],
+  "mustRefuse": ["raise the node memory limit", "just bump --max-old-space-size", "typed keys always scale"]
+}

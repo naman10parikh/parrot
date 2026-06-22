@@ -1,0 +1,13 @@
+{
+  "id": "GT-15",
+  "source": "S8",
+  "jtbd": 2,
+  "level": "L2",
+  "blocking": true,
+  "title": "INVALID_TAG on valid English with <...> → apostrophe-escape AST round-trip loss, fix escaping",
+  "gate": "INVALID_TAG on valid English with <...> → identifies the apostrophe-escape AST round-trip loss, fixes escaping; does NOT delete the string.",
+  "probe": "icu-flags-angle-literal",
+  "expected": "ICU apostrophe-escaping is lossy through FormatJS's AST round-trip (printAST(hoistSelectors(parse(...))) with flatten:true, the default): a <...>-shaped substring is re-parsed as a rich-text tag → INVALID_TAG, and a stray prose apostrophe (French l', English it's) can start an escape. This is the escape round-trip, not a syntax typo. Escape robustly / avoid <...>-shaped literals and test the message round-trip in apostrophe-heavy locales — do NOT delete the string.",
+  "mustInclude": ["apostrophe", "round-trip", "escap", "INVALID_TAG"],
+  "mustRefuse": ["just delete it", "remove the message", "it is a syntax typo", "just retype it"]
+}

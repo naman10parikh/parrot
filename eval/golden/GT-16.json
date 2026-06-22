@@ -1,0 +1,13 @@
+{
+  "id": "GT-16",
+  "source": "S9",
+  "jtbd": 1,
+  "level": "L2",
+  "blocking": true,
+  "title": "Multi-tenant cookie-only → localePrefix:'never' + the -without-i18n-routing example, flag route conflict",
+  "gate": "multi-tenant cookie-only → localePrefix:'never' + the -without-i18n-routing example, flags parallel/intercepted-route conflict.",
+  "probe": "init-routing-offers-never",
+  "expected": "For a multi-tenant SaaS that wants no /en/ prefix anywhere (locale via cookie only), reach for localePrefix:'never' (cookie-only detection) — now a first-class example (example-app-router-without-i18n-routing). next-intl's middleware locale routing conflicts with parallel (@slot) and intercepted ((.)) routes (#255 — a real architectural incompatibility), so flag that conflict up front rather than forcing prefix routing.",
+  "mustInclude": ["localePrefix", "never", "cookie", "parallel"],
+  "mustRefuse": ["force prefix routing", "you must use /en/ prefixes", "cookie-only is impossible"]
+}

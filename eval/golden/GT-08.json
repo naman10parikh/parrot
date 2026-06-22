@@ -1,0 +1,13 @@
+{
+  "id": "GT-8",
+  "source": "S15",
+  "jtbd": 7,
+  "level": "L2",
+  "blocking": false,
+  "title": "Dup key silently overwriting → dup-key build gate, no dynamic keys, honest about unused-key detection",
+  "gate": "A dup key silently overwriting → adds a dup-key build gate, forbids dynamic keys, is honest unused-key detection is incomplete.",
+  "probe": "extract-honest-unused-note",
+  "expected": "The JSON/YAML parser silently overwrites an already-defined key, so a duplicate key is a silently broken, untested feature. Make dup-key detection a build GATE (a CI test that fails on any duplicate + redefinition at the same hierarchical level). Keep keys grep-able (ASCII letters/digits/hyphens/underscores) and NEVER dynamically constructed. Be honest: there is no perfect unused-key story — static misses dynamic usage, runtime misses rare features.",
+  "mustInclude": ["dup", "build gate", "dynamic", "grep-able"],
+  "mustRefuse": ["the parser will catch duplicates", "dynamic keys are fine", "we can fully detect unused keys"]
+}

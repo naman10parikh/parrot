@@ -1,0 +1,13 @@
+{
+  "id": "GT-12",
+  "source": "S12",
+  "jtbd": 5,
+  "level": "L2",
+  "blocking": false,
+  "title": "Geo-IP hard-redirect → suggestion banner + cookie, keep all locales crawlable",
+  "gate": "geo-IP hard-redirect → replaces with a suggestion banner + cookie, keeps all locales crawlable, explains detect-vs-routing.",
+  "probe": "policy-detect-to-suggest",
+  "expected": "Hard-redirecting by geo-IP/Accept-Language means Googlebot (US) only ever sees US content and users can't reach a locale via a shared link — it tanks international rankings and traps users. Detection (picking a locale for an undecided user) is not routing (which URL serves which locale). Detect to SUGGEST via a banner/cookie, never hard-redirect — especially not the crawler. Keep every locale reachable by URL.",
+  "mustInclude": ["suggest", "banner", "cookie", "crawl"],
+  "mustRefuse": ["hard-redirect by geo-IP", "redirect the crawler", "force the user to their geo locale", "302 by Accept-Language"]
+}

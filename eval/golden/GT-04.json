@@ -1,0 +1,13 @@
+{
+  "id": "GT-4",
+  "source": "S14",
+  "jtbd": 2,
+  "level": "L2",
+  "blocking": false,
+  "title": "Concatenated t('a')+count+t('b') → rewrite as one full-sentence ICU message with plural",
+  "gate": "A concatenated t('a')+count+t('b') → rewrites as one full-sentence ICU message with plural; cites never-concatenate.",
+  "probe": "icu-fullsentence-plural-valid",
+  "expected": "Never concatenate sentence fragments — it breaks word order, gender, declension and plural-in-context in most languages. Write the full sentence with ICU interpolation: t('cartSummary', {count}) where the message is 'You have {count, plural, one {# item} other {# items}} in your cart', with a description/context field. One message per full sentence.",
+  "mustInclude": ["full sentence", "plural", "interpolat", "never concatenate"],
+  "mustRefuse": ["concatenate the fragments", "join the strings with +", "reuse the fragments"]
+}

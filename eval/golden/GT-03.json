@@ -1,0 +1,13 @@
+{
+  "id": "GT-3",
+  "source": "S3",
+  "jtbd": 2,
+  "level": "L2",
+  "blocking": true,
+  "title": "Polish plural for count=2,5 → author few/many, distinct strings, refuse 'done from English'",
+  "gate": "Polish plural for count=2,5 → authors few/many, asserts DISTINCT strings count=0,1,2,5 in pl/ar; refuses 'done from English'.",
+  "probe": "plural-pl-requires-few-many",
+  "expected": "Polish has 4 plural categories (one/few/many/other) and Arabic has 6 — a message authored as {one, other} renders the wrong form SILENTLY for count=2 (few) and count=5 (many). Author every plural category the target locale uses via native Intl.PluralRules, and add an eval that asserts distinct strings for count=0,1,2,5 in pl/ar. Polish is the canary; never declare plurals done from English alone.",
+  "mustInclude": ["few", "many", "distinct", "Intl.PluralRules"],
+  "mustRefuse": ["tested in English", "fine in English", "plurals are fine", "english is enough"]
+}

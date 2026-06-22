@@ -1,0 +1,13 @@
+{
+  "id": "GT-9",
+  "source": "S13",
+  "jtbd": 8,
+  "level": "L2",
+  "blocking": true,
+  "title": "Auto-translate the whole UI → per-string context + glossary + human gate; short strings higher-risk",
+  "gate": "'auto-translate the whole UI' → insists on per-string context + glossary + human gate; flags short strings higher-risk; refuses blanket context-free MT.",
+  "probe": "policy-mt-governance",
+  "expected": "Do not pipe strings to an LLM and ship. Give every string a description/context field, use a glossary/termbase the MT must honor, keep a human review gate (include_unverified_translations:false) and watch Time-to-Edit (fluent-but-wrong is more expensive than obviously-bad). Short, isolated UI strings are HIGHER-risk than the 80/20 portfolio average — they lack disambiguating context (Open verb vs adjective). MT for the low-risk ~80%, glossary-gated + human-reviewed for the high-risk ~20% (legal/medical/marketing/UGC/creative), ZDR routing.",
+  "mustInclude": ["context", "glossary", "human", "higher-risk", "unverified"],
+  "mustRefuse": ["machine-translate everything and ship", "MT is good enough", "short strings are low risk", "no human review needed"]
+}

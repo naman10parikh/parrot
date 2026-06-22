@@ -1,0 +1,14 @@
+{
+  "id": "GT-14",
+  "source": "S6",
+  "jtbd": 11,
+  "level": "L3",
+  "blocking": false,
+  "title": "FormatJS extract perf cliff / Alpine break → pin the CLI, flag the NAPI rewrite, extract==build invariant",
+  "gate": "FormatJS extract perf cliff / Alpine break → pins the CLI, flags the native-NAPI rewrite, tests on dev OS, adds extract==build invariant.",
+  "probe": null,
+  "judge": "trajectory",
+  "expected": "FormatJS moved extract/compile to platform-specific native NAPI binaries in 2026 → ~100x slower extract on Windows, no binary for Alpine/musl, dropped platforms at points, and extract-vs-build ID divergence (strings silently show their fallback/ID). Pin @formatjs/cli EXACTLY; test extract perf on the OS your devs actually use (not just Linux CI); for the musl gap use a glibc base image or force the JS path; assert the extract==build invariant (byte-identical IDs/messages) as a CI check. Do NOT just bump to latest.",
+  "mustInclude": ["pin", "NAPI", "extract==build", "Alpine", "devs actually use"],
+  "mustRefuse": ["upgrade to the newest formatjs", "alpine is fine", "perf cliff only matters on windows so ignore it"]
+}

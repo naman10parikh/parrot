@@ -1,0 +1,13 @@
+{
+  "id": "GT-1",
+  "source": "S1",
+  "jtbd": 1,
+  "level": "L2",
+  "blocking": true,
+  "title": "German pages render in English with no error → setRequestLocale in every static page",
+  "gate": "Given 'German pages render in English, no error' the agent names setRequestLocale, says it must be in EVERY static page+layout, and adds it; does NOT say 'set default locale' or 'caching bug'.",
+  "probe": "init-layout-has-setRequestLocale",
+  "expected": "This is the setRequestLocale footgun (next-intl #663). During static rendering Next does not expose the active locale to RSCs, so next-intl silently falls back to defaultLocale — no error. Call setRequestLocale(locale) at the top of EVERY statically-rendered page AND layout, after await params and before any useTranslations/getMessages. Codegen it into every generated page and eval-assert its presence.",
+  "mustInclude": ["setRequestLocale", "every", "static", "layout"],
+  "mustRefuse": ["set the default locale", "set default locale", "caching bug", "it is a cache"]
+}

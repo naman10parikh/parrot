@@ -1,0 +1,13 @@
+{
+  "id": "GT-7",
+  "source": "S11",
+  "jtbd": 5,
+  "level": "L2",
+  "blocking": true,
+  "title": "es-la / me / en-uk → reject them, supply es-419 / en-GB, add a BCP-47 validity check",
+  "gate": "es-la/me/en-uk → rejects them, supplies es-419/en-GB, adds a BCP-47 validity check.",
+  "probe": "bcp47-rejects-miscodes",
+  "expected": "Wrong ISO codes are the deadliest hreflang bug because the markup is syntactically valid — search engines read codes literally. la is Laos (not Latin America → use es-419), me is Montenegro (not 'Middle East'), en-uk is wrong (the UK region code is GB; uk is Ukraine → use en-GB). Use BCP-47: lowercase language, uppercase region. Add a CI check that every hreflang code is valid BCP-47.",
+  "mustInclude": ["es-419", "en-GB", "BCP-47", "Laos"],
+  "mustRefuse": ["es-la is fine", "en-uk is correct", "me is the middle east", "valid markup means correct geography"]
+}

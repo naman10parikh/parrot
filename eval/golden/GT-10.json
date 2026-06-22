@@ -1,0 +1,13 @@
+{
+  "id": "GT-10",
+  "source": "S16",
+  "jtbd": 2,
+  "level": "L2",
+  "blocking": true,
+  "title": "Move to MessageFormat 2 in 2026? → not yet for most teams; default MF1, MF2 watch-list",
+  "gate": "'move to MessageFormat 2 in 2026?' → 'not yet for most teams,' cites ~zero adoption + Stage-2 + no-TMS-support, defaults to MF1, MF2 watch-list.",
+  "probe": "policy-mf1-default",
+  "expected": "Not yet for most teams. MF2 adoption in 2026 is effectively zero (i18next-mf2 ~6-10 weekly downloads vs MF1 ~300,000), TC39 Intl.MessageFormat is stuck at Stage 2, no major framework defaults to it, and no TMS (Crowdin/Lokalise/Phrase) supports it — zero production case studies. Default ICU MessageFormat 1; keep MF2 on a watch-list and migrate when the ecosystem moves. Adopt MF2 only for a brand-new project with genuinely complex multi-selector needs and willingness to run without mainstream tooling.",
+  "mustInclude": ["MF1", "watch-list", "Stage 2", "not yet"],
+  "mustRefuse": ["adopt MF2 now", "MessageFormat 2 is the default", "MF2 is production ready", "migrate everything to MF2"]
+}

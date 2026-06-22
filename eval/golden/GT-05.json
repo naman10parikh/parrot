@@ -1,0 +1,13 @@
+{
+  "id": "GT-5",
+  "source": "S7",
+  "jtbd": 4,
+  "level": "L2",
+  "blocking": true,
+  "title": "RTL translated but Arabic broken + checkmark mirrored → fix CSS + selective icon mirroring",
+  "gate": "'RTL strings translated but Arabic broken + checkmark mirrored' → fixes letter-spacing/webfont AND replaces blanket scaleX(-1) with selective mirroring (excl. play/pause/checkmarks); adds an RTL screenshot.",
+  "probe": "check-flags-rtl-without-dir",
+  "expected": "Two bugs. (1) Latin defaults destroy Arabic: set letter-spacing:0 (it disconnects connected letters), tune line-height for the Arabic font's metrics, ship a real Arabic webfont. (2) A blanket [dir=rtl] svg { transform: scaleX(-1) } mirrors EVERYTHING — use selective mirroring — flip only directional icons (nav/back/send/chevrons), never play/pause (tape direction not time), symmetric symbols, or checkmarks (Material 'object held in the right hand → no flip'). RTL is a coverage problem — add an RTL screenshot to the eval.",
+  "mustInclude": ["letter-spacing", "selective", "checkmark", "scaleX", "coverage"],
+  "mustRefuse": ["mirror all icons", "blanket scaleX", "flip every svg", "logical properties solve rtl"]
+}

@@ -11,11 +11,20 @@
  */
 
 import { Command } from "commander";
+import { execFileSync } from "node:child_process";
+import { existsSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { runInit, type I18nLib } from "./commands/init.js";
 import { runExtract } from "./commands/extract.js";
 import { runCheck } from "./commands/check.js";
 import { runBrain } from "./commands/brain.js";
 import { logRun, makeEntry } from "./util/log.js";
+
+/** Repo root, resolved from the compiled CLI location (dist/cli/index.js → two dirs up). */
+function repoRoot(): string {
+  return join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+}
 
 const VERSION = "0.1.0";
 
@@ -153,7 +162,30 @@ export async function main(argv: string[]): Promise<void> {
   program.command("tms").description("drive the TMS sync (Tolgee / Lingo.dev / Crowdin)").allowUnknownOption(true).action(() => notImplemented("tms", "cluster B (mt-tms-governance)"));
   program.command("pick").description("a library decision with the honest cost (not a feature table — O3)").allowUnknownOption(true).action(() => notImplemented("pick", "cluster B"));
   program.command("explain").description("print a brain entry by id (e.g. parrot explain P1)").allowUnknownOption(true).action(() => notImplemented("explain", "cluster B"));
-  program.command("eval").description("run the eval pyramid (L1 assertions / L2 golden / L3 judge)").allowUnknownOption(true).action(() => notImplemented("eval", "cluster E (evals)"));
+
+  // ---- eval (E1 — the pyramid; delegates to eval/eval.mjs which probes the compiled lib) ----
+  // NOTE: `eval` is the TEST layer, not a production i18n op — it deliberately does NOT append to
+  // logs/runs.jsonl (that's for init/extract/check/brain). Logging an eval run would dirty the tree and break
+  // the RSI deterministic propose-only invariant (rsi.yml asserts a clean tree after `parrot eval --level 1`).
+  program
+    .command("eval")
+    .description("run the eval pyramid (L1 structural / L2 golden tasks / L3 LLM-judge — the differentiator)")
+    .option("--level <n>", "1 = structural | 2 = golden (blocking gate) | 3 = +LLM-judge", "2")
+    .action((opts: { level: string }) => {
+      const runner = join(repoRoot(), "eval", "eval.mjs");
+      if (!existsSync(runner)) {
+        process.stderr.write("parrot eval: eval/eval.mjs not found (the eval pyramid is part of the repo).\n");
+        process.exit(2);
+      }
+      try {
+        execFileSync("node", [runner, "--level", String(opts.level)], { stdio: "inherit" });
+        // execFileSync throws on a non-zero exit; reaching here means exit 0 (green).
+      } catch (err: unknown) {
+        // Forward the runner's exit code (a RED eval must propagate non-zero so CI blocks the merge).
+        const code = err && typeof err === "object" && "status" in err ? Number((err as { status: unknown }).status) : 1;
+        process.exit(Number.isFinite(code) && code !== 0 ? code : 1);
+      }
+    });
 
   await program.parseAsync(argv);
 }

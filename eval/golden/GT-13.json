@@ -1,0 +1,14 @@
+{
+  "id": "GT-13",
+  "source": "S4",
+  "jtbd": 6,
+  "level": "L3",
+  "blocking": false,
+  "title": "UI half-updates after switching to Lingui → macro-not-subscribed-to-context; migration = full refactor",
+  "gate": "'UI half-updates after switching to Lingui' → names macro-not-subscribed-to-context, prescribes useLingui() + ESLint guard, treats migration as full-surface refactor.",
+  "probe": null,
+  "judge": "trajectory",
+  "expected": "The compiled Lingui t macro does NOT subscribe to the I18nProvider context — only <Trans/> auto-updates on a locale change, so some strings stay in the old language. Add useLingui() hooks in components that use t so they re-render on locale change; write a custom ESLint rule forbidding module-scope t (the t macro can't run at module scope); fix SSR with per-language dynamic imports of locale providers. Changing the i18n library mid-project touches every component, routing, the build pipeline and the translation workflow — treat it as a full-component-surface refactor, not a one-line fix.",
+  "mustInclude": ["useLingui", "context", "ESLint", "refactor", "module-scope"],
+  "mustRefuse": ["just swap the import", "a codemod is enough", "macros auto-subscribe"]
+}

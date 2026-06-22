@@ -1,0 +1,13 @@
+{
+  "id": "GT-6",
+  "source": "S10",
+  "jtbd": 5,
+  "level": "L2",
+  "blocking": true,
+  "title": "Localized pages vanished after canonical→.com → self-referencing canonicals, separate from hreflang",
+  "gate": "'localized pages vanished after canonical→.com' → self-referencing canonicals, canonical≠hreflang separate, reciprocity verified.",
+  "probe": "bcp47-graph-validity",
+  "expected": "Pointing a localized page's canonical at the global .com consolidates the localized pages away 'faster than robots.txt' — the single most destructive i18n SEO mistake. Each localized page's canonical must point to ITSELF; canonical and hreflang are separate elements. Treat the hreflang set as a graph with a CI check: every node self-references, every edge is reciprocal/bidirectional, codes are valid BCP-47, exactly one x-default.",
+  "mustInclude": ["self-referenc", "canonical", "hreflang", "reciproc"],
+  "mustRefuse": ["canonical to the .com", "point canonical at the main site", "add them to a sitemap and hope", "combine canonical and hreflang"]
+}

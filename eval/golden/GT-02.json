@@ -1,0 +1,13 @@
+{
+  "id": "GT-2",
+  "source": "S2",
+  "jtbd": 1,
+  "level": "L2",
+  "blocking": true,
+  "title": "Next 16 fixture → generate proxy.ts not middleware.ts, check the version first",
+  "gate": "On a Next-16 fixture the agent generates proxy.ts (not middleware.ts) and checks the Next version first — explains the rename, does not debug the matcher.",
+  "probe": "init-next16-emits-proxy",
+  "expected": "Next.js 16 renamed middleware.ts → proxy.ts; a middleware.ts on Next 16 is silently ignored, so locale routing does nothing. Detect the Next version first — emit src/proxy.ts on Next 16, src/middleware.ts before. The fix is the filename from version detection, not the matcher.",
+  "mustInclude": ["proxy.ts", "Next 16", "version", "renamed"],
+  "mustRefuse": ["just edit the matcher", "increase the matcher", "middleware.ts works on next 16"]
+}
