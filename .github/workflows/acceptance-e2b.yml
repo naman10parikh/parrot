@@ -1,0 +1,63 @@
+name: parrot acceptance (E2B live render)
+# The ADDITIVE Sandbox-component proof (PLAN §5 + Sandbox OVERRIDE / D15): runs the SAME §5 acceptance flow PLUS
+# the LIVE `next dev` boot + HTTP GET `/ar/` (asserting served <html dir="rtl">) inside an E2B Firecracker
+# microVM — but ONLY when E2B_API_KEY is present. This is NOT the merge gate (that's acceptance.yml on ubuntu,
+# $0, no creds); E2B is NOT a hard gate. On-demand only (workflow_dispatch) — the live Next boot adds minutes +
+# flake, so it never runs per-push. Cold start: ~150ms microVM, but `next dev` first boot dominates (see
+# sandbox/README.md).
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance-e2b:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard — E2B_API_KEY present?
+        id: guard
+        env:
+          E2B_API_KEY: ${{ secrets.E2B_API_KEY }}
+        run: |
+          if [ -n "$E2B_API_KEY" ]; then
+            echo "have_key=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "have_key=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::E2B_API_KEY not set — the live E2B render is additive (Sandbox component), not the merge gate. The ubuntu acceptance.yml is the merge gate. Skipping."
+          fi
+
+      - uses: pnpm/action-setup@v4
+        if: steps.guard.outputs.have_key == 'true'
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        if: steps.guard.outputs.have_key == 'true'
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install parrot + the E2B CLI
+        if: steps.guard.outputs.have_key == 'true'
+        run: |
+          pnpm install --frozen-lockfile || pnpm install
+          pnpm build
+
+      - name: Acceptance + LIVE /ar/ render inside the isolated env (E2B)
+        if: steps.guard.outputs.have_key == 'true'
+        env:
+          E2B_API_KEY: ${{ secrets.E2B_API_KEY }}
+        run: |
+          set -e
+          # The §5 flow (same as the ubuntu merge gate) …
+          node bin/parrot init    --dir eval/fixtures/app --lib next-intl
+          node bin/parrot extract --dir eval/fixtures/app --json > /tmp/extract.json
+          node bin/parrot check   --dir eval/fixtures/app --locales en,pl,ar --json > /tmp/check.json
+          node eval/acceptance/assert.mjs /tmp/extract.json /tmp/check.json
+          # … PLUS the live render: install Next into the fixture, then boot + GET /ar/ asserting dir="rtl".
+          # (E2B isolation: this heavy install/boot runs in the ephemeral microVM, not the host — see
+          #  sandbox/README.md for the E2B template + cold-start notes.)
+          pnpm --dir eval/fixtures/app install
+          node sandbox/render-ar.mjs --mode live

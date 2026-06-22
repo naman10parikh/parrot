@@ -1,0 +1,52 @@
+name: parrot acceptance
+# THE merge gate (PLAN §5 + D15 LOCAL-FIRST): the §5 acceptance flow on ubuntu-latest, $0, NO provider creds,
+# RED-BLOCKING on every push + PR. `parrot init` wires next-intl → `parrot extract` finds the planted hardcoded
+# string → `parrot check` validates the pl plural gap → eval/acceptance/assert.mjs asserts all 5 §5 conditions
+# (incl. the `ar` round-trip via the layout dir-logic + native Intl plural). The LIVE Next `/ar/` HTTP render is
+# the ADDITIVE Sandbox proof (acceptance-e2b.yml, on-demand) — E2B is NOT a hard gate; the merge gate is this
+# ubuntu path only (Sandbox OVERRIDE / Q1: the live render demotes to the component proof, never blocks merge).
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install + build (the eval probes import the compiled lib from dist/)
+        run: |
+          pnpm install --frozen-lockfile || pnpm install
+          pnpm build
+      - name: Acceptance — init → extract → check → assert (the §5 bar, $0/offline)
+        run: |
+          set -e
+          node bin/parrot init    --dir eval/fixtures/app --lib next-intl
+          node bin/parrot extract --dir eval/fixtures/app --json > /tmp/extract.json
+          node bin/parrot check   --dir eval/fixtures/app --locales en,pl,ar --json > /tmp/check.json
+          node eval/acceptance/assert.mjs /tmp/extract.json /tmp/check.json
+      - name: pass^k — run the acceptance flow 3× (no flake; k≥3)
+        run: |
+          set -e
+          for k in 1 2 3; do
+            node bin/parrot init    --dir eval/fixtures/app --lib next-intl >/dev/null
+            node bin/parrot extract --dir eval/fixtures/app --json > /tmp/extract.json
+            node bin/parrot check   --dir eval/fixtures/app --locales en,pl,ar --json > /tmp/check.json
+            node eval/acceptance/assert.mjs /tmp/extract.json /tmp/check.json >/dev/null
+            echo "acceptance pass $k/3 green"
+          done
+      - name: Eval pyramid — L1 + L2 blocking golden set (red-blocking)
+        run: node bin/parrot eval --level 2
+      - name: Sandbox /ar/ round-trip proof (local $0 mode — live render is acceptance-e2b.yml)
+        run: node sandbox/render-ar.mjs --mode local
