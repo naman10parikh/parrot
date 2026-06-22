@@ -1,20 +1,44 @@
 name: parrot RSI
-# CP123: dispatch-only until the RSI engine (workflows/rsi.workflow.js + eval gate) is built in Wave B/E.
-# The Claude half additionally needs CLAUDE_CODE_OAUTH_TOKEN (chairman checklist, D8). Guarded = always green.
+# CP123 D2: the DETERMINISTIC ($0, tokenless) RSI half runs ENABLED on a weekly cron (CP117's #1 lesson:
+# written ≠ enabled). It refreshes tool-matrix versions, re-verifies brain pins, runs the eval pyramid,
+# and PROPOSES drift to .rsi/proposal.json — it NEVER auto-commits (propose-only). The Claude half
+# (brain-file rewrite + new golden task on a real watchlist delta) is deferred until CLAUDE_CODE_OAUTH_TOKEN
+# is set per repo (chairman checklist, D8) — its absence is not a gap.
 on:
+  schedule:
+    # Weekly, Monday 09:00 UTC (PLAN §14 Q13 / D13). UNCOMMENTED = live.
+    - cron: '0 9 * * 1'
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  rsi:
+  rsi-deterministic:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Engine guard
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install + build (so `parrot eval` is available to the loop)
         run: |
-          if [ ! -f workflows/rsi.workflow.js ]; then
-            echo "RSI engine not built yet (CP123 cluster E) — exiting green."; exit 0
+          pnpm install --frozen-lockfile || pnpm install
+          pnpm build
+      - name: Run the deterministic RSI loop (propose-only, never commits)
+        run: node workflows/rsi.workflow.js --deterministic
+      - name: Assert the loop did not modify tracked files (propose-only invariant)
+        run: |
+          set -e
+          # The deterministic half writes only .rsi/ (gitignored). The tree MUST be clean — proves it proposes
+          # without committing (the dsip snapback / CP117 "enabled ≠ auto-commit" guarantee).
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::RSI deterministic run modified tracked files — it must PROPOSE, not commit"
+            git status --porcelain
+            exit 1
           fi
-          echo "engine present — deterministic half would run here (wired in cluster E)"
+          echo "propose-only invariant holds — working tree clean"

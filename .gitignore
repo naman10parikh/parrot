@@ -29,4 +29,7 @@ brain/.brain-index.json
 # parrot CLI compiled output — derived from src/ via `pnpm build` (B2)
 dist/
 
+# parrot RSI deterministic-loop proposal output — derived, never committed (D2; keeps the tree clean post-run)
+.rsi/
+
 .env
