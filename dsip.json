@@ -3,15 +3,34 @@
   "product": "parrot",
   "levels": ["agent"],
   "loop": {
-    "cadence": "nightly",
-    "steps": ["refresh-brain", "re-verify-tool-matrix", "run-eval-pyramid", "propose", "validate", "ship"]
+    "cadence": "on-signal",
+    "steps": [
+      "refresh-tool-matrix-versions",
+      "re-verify-brain-pins",
+      "run-eval-pyramid",
+      "propose",
+      "validate",
+      "ship"
+    ]
   },
-  "selection": "performance",
+  "selection": "performance-novelty",
   "eval": {
-    "rubric": "eval/ (Hamel L1 assertions + L2 behavior + L3 trajectory; golden tasks from brain/BATTLE-TESTED-SCENARIOS.md)",
-    "gate": "acceptance-test-green && no-regression",
-    "noSelfGrading": true
+    "rubric": "eval/eval.mjs (Hamel L1 assertions + L2 binary golden tasks from brain/BATTLE-TESTED-SCENARIOS.md graded vs each scenario Eval-gate + L3 trajectory judge; the acceptance test is the top integration eval)",
+    "gate": "no-regression && all-pass"
   },
-  "snapback": { "granularity": ["skill", "employee"], "vcs": "git" },
-  "externalIntelligence": { "enabled": true, "source": "vertical ecosystem watch (changelogs, issues, X) per brain/TOOL-MATRIX.md" }
+  "snapback": {
+    "granularity": ["component", "repo"],
+    "vcs": "git"
+  },
+  "externalIntelligence": {
+    "enabled": true,
+    "source": "npm-view + github-repros (next-intl / i18next / react-intl / @lingui/core / @lingual/i18n-check / lingo.dev changelogs + issues; the vertical ecosystem watch per brain/TOOL-MATRIX.md)"
+  },
+  "domains": [
+    "tool-matrix-currency",
+    "brain-pin-integrity",
+    "eval-health",
+    "plural-rtl-coverage"
+  ],
+  "noSelfGrading": true
 }
