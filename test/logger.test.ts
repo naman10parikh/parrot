@@ -6,14 +6,25 @@
  * an automatic ❌. These tests prove the redactor strips it and that `logRun` appends a valid, scrubbed line.
  */
 
-import { describe, it, expect, afterEach } from "vitest";
-import { readFileSync, rmSync, existsSync } from "node:fs";
+import { describe, it, expect, afterEach, beforeAll, afterAll } from "vitest";
+import { readFileSync, rmSync, existsSync, mkdtempSync } from "node:fs";
 import { join } from "node:path";
+import { tmpdir } from "node:os";
 import { redactUrl, logRun, type LogEntry } from "../src/lib/logger.js";
 
-// The logger anchors logs/runs.jsonl to its compiled location's repo root. Under vitest we run from src, so the
-// repo root is the cwd — the same logs/runs.jsonl path. Clean it between tests so counts are deterministic.
-const RUNS = join(process.cwd(), "logs", "runs.jsonl");
+// The logger writes to logs/runs.jsonl (anchored to the repo root). That file is SEEDED + COMMITTED (E3 — it
+// must be tracked + not-gitignored), so the test MUST NOT write to / delete it. We point the logger at a TEMP
+// file via the PARROT_RUNS_LOG override for the duration of these tests, and clean only that temp file. This
+// keeps the seeded repo log pristine through `pnpm test` (no dirty tree, no deleted seed).
+const TMP_DIR = mkdtempSync(join(tmpdir(), "parrot-logtest-"));
+const RUNS = join(TMP_DIR, "runs.jsonl");
+beforeAll(() => {
+  process.env["PARROT_RUNS_LOG"] = RUNS;
+});
+afterAll(() => {
+  delete process.env["PARROT_RUNS_LOG"];
+  rmSync(TMP_DIR, { recursive: true, force: true });
+});
 afterEach(() => {
   if (existsSync(RUNS)) rmSync(RUNS);
 });

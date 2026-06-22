@@ -47,6 +47,11 @@ export interface LogEntry {
  * target app, or CI — the observability log is parrot's, about parrot's runs.
  */
 function runsLogPath(): string {
+  // Test/CI override: tests point this at a temp file so they never clobber the SEEDED, committed repo log
+  // (E3 requires logs/runs.jsonl to be tracked + not-gitignored; a test's rmSync of the real path would break
+  // that + dirty the tree). Production leaves it unset → the repo's logs/runs.jsonl.
+  const override = process.env["PARROT_RUNS_LOG"];
+  if (override && override.length > 0) return override;
   const here = dirname(fileURLToPath(import.meta.url)); // .../dist/lib
   const repoRoot = join(here, "..", ".."); // .../  (repo root)
   return join(repoRoot, "logs", "runs.jsonl");
