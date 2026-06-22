@@ -1,0 +1,103 @@
+{
+  "name": "parrot",
+  "version": "0.1.0",
+  "description": "The Energy fleet's internationalization (i18n / l10n) domain-expert employee as one installable Claude Code plugin: bundles the `parrot` CLI, the `parrot` stdio MCP server, the six i18n skills, the i18n-string-gate hook, and the two sub-agent personas. Install to wire next-intl into a Next.js app the first time (the 4 load-bearing files, proxy.ts on Next 16, setRequestLocale everywhere), find hardcoded user-facing strings, author/lint ICU MessageFormat plurals, audit RTL/bidi as a layout job, validate the hreflang graph, run governed machine-translation, and gate i18n correctness in CI — always testing the 20% that English-only testing never catches (pl/ar/he plurals + RTL + format), never the words themselves. Boundary (HARD, brain P29): i18n plumbing + grammar engine + routing + CI gate ONLY — parrot wires the pipeline that carries and gates the strings, it NEVER authors the copy (marketing/docs/prose, brand voice, human translation of long-form text → content employee / human translator). Powered by Energy.",
+  "author": {
+    "name": "Energy fleet",
+    "url": "https://github.com/naman10parikh/parrot"
+  },
+  "homepage": "https://github.com/naman10parikh/parrot/blob/main/AGENTS.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/naman10parikh/parrot.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "i18n",
+    "l10n",
+    "internationalization",
+    "localization",
+    "next-intl",
+    "icu",
+    "messageformat",
+    "plural",
+    "rtl",
+    "bidi",
+    "hreflang",
+    "next-font",
+    "tolgee",
+    "lingo.dev",
+    "mcp",
+    "harness",
+    "agent-native",
+    "energy"
+  ],
+  "bin": {
+    "parrot": "bin/parrot"
+  },
+  "skills": "skills",
+  "agents": ".claude/agents",
+  "hooks": ".claude/settings.json",
+  "mcpServers": ".mcp.json",
+  "bundles": {
+    "cli": {
+      "name": "parrot",
+      "bin": "bin/parrot",
+      "commands": [
+        "init",
+        "extract",
+        "check",
+        "icu",
+        "rtl",
+        "fonts",
+        "seo",
+        "mt",
+        "tms",
+        "pick",
+        "brain",
+        "explain",
+        "eval"
+      ]
+    },
+    "mcpServer": {
+      "name": "parrot",
+      "id": "parrot-mcp",
+      "transport": "stdio",
+      "command": "node dist/mcp/server.js",
+      "tools": [
+        "parrot_init",
+        "parrot_extract",
+        "parrot_check",
+        "parrot_icu",
+        "parrot_rtl_audit",
+        "parrot_hreflang",
+        "parrot_pick",
+        "parrot_search_brain",
+        "parrot_explain"
+      ],
+      "resources": ["parrot://brain/*"],
+      "config": ".mcp.json"
+    },
+    "skills": [
+      "skills/i18n-setup-nextjs/SKILL.md",
+      "skills/icu-message-authoring/SKILL.md",
+      "skills/rtl-bidi-audit/SKILL.md",
+      "skills/hreflang-seo-graph/SKILL.md",
+      "skills/mt-tms-governance/SKILL.md",
+      "skills/i18n-font-fallback/SKILL.md"
+    ],
+    "hook": {
+      "name": "i18n-string-gate",
+      "event": "PreToolUse",
+      "matcher": "Write|Edit|MultiEdit",
+      "path": ".claude/hooks/i18n-string-gate.js",
+      "description": "Parse-time block of parrot's own law: a hardcoded multi-word user-facing string in a .tsx return outside a t()/<Trans> call (the catalog-bypass — brain P9/O8) and a write of a non-${VAR} literal secret into .mcp.json. Fail-open on malformed/empty stdin; emits a cited message + non-zero exit on a real violation. The inherited protect-secrets.js is KEPT alongside it (it blocks credential files; this hook blocks hardcoded-string patterns)."
+    },
+    "agents": [
+      ".claude/agents/i18n-correctness-auditor.md",
+      ".claude/agents/i18n-migration-planner.md"
+    ]
+  },
+  "install_instructions": "1. Install deps + build: pnpm install --frozen-lockfile && pnpm build (so dist/mcp/server.js exists).  2. Add this plugin to Claude Code: Settings → Plugins → Add local plugin → select the parrot repo root.  3. The parrot CLI (`parrot --help`), the 9 MCP tools (parrot_init / parrot_extract / parrot_check / parrot_icu / parrot_rtl_audit / parrot_hreflang / parrot_pick / parrot_search_brain / parrot_explain) + the parrot://brain/* resources, the 6 skills, the 2 sub-agent personas (i18n-correctness-auditor, i18n-migration-planner), and the i18n-string-gate hook are now available; the parrot MCP server is wired via .mcp.json (TMS/MT creds as ${env-refs}, no live keys). HARD invariant (brain P29): parrot wires the i18n pipeline + grammar engine + routing + CI gate — it NEVER authors the words. It tests pl/ar/he, never English alone (brain O7/O23). mt/tms are advertised as plannedCapabilities in the A2A card until their cluster lands — the card never over-claims."
+}

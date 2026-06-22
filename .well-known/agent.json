@@ -1,0 +1,117 @@
+{
+  "protocolVersion": "1.0",
+  "name": "parrot",
+  "description": "The Energy fleet's internationalization (i18n / l10n) domain-expert employee — the faithful carrier that takes your product strings into any locale CORRECTLY (right plural, right direction, right glyphs, right URL) without authoring the words. parrot wires next-intl into a Next.js app the first time (the 4 load-bearing files, proxy.ts on Next 16 not middleware.ts, setRequestLocale in every static page, await params), finds hardcoded user-facing strings that bypass the catalog, authors + lints ICU MessageFormat (plural/selectordinal/select — every category the target uses, full-sentence never concatenation, native Intl.*), audits RTL/bidi as a layout + typography job (logical props + selective icon mirroring + Arabic-safe CSS), validates the hreflang graph (self-ref canonicals + reciprocal BCP-47 edges + one x-default), drives a GOVERNED machine-translation pipeline (glossary-gated, per-string context, human-reviewed 20%, ZDR, never ships MT unverified), and gates i18n correctness in CI — testing the 20% that English-only testing never catches (pl/ar/he plurals + RTL + format), proven by a locale that round-trips. Boundary (HARD, brain P29): i18n plumbing + grammar engine + routing + CI gate ONLY — parrot wires the pipeline that carries and gates the strings; composing them (marketing/docs/prose copy, brand voice, human translation of long-form text) is a content employee / human translator's job. Tagline: Every locale, correct on day one — the 20% English never sees. Powered by Energy.",
+  "version": "0.1.0",
+  "documentationUrl": "https://github.com/naman10parikh/parrot/blob/main/AGENTS.md",
+  "provider": {
+    "organization": "Energy",
+    "url": "https://github.com/naman10parikh/parrot"
+  },
+  "preferredTransport": "stdio",
+  "url": "stdio://parrot",
+  "endpoint": "stdio:node dist/mcp/server.js",
+  "additionalInterfaces": [
+    {
+      "transport": "cli",
+      "url": "node bin/parrot <capability> [args] --json",
+      "note": "parrot is a stdio-local tool-employee for C2 (no hosted endpoint — HARNESS-OVERRIDES §7; checklist permits stdio-local for dev-tools). Every delivered capability round-trips through the local CLI (`node bin/parrot ...`) or the stdio MCP server. The acceptance bar (init → next-intl wired → extract finds hardcoded → check validates ICU plural/RTL → a locale round-trips) is fixture-driven and runs $0/no-creds on the blocking path (D15)."
+    },
+    {
+      "transport": "mcp-stdio",
+      "url": "node dist/mcp/server.js",
+      "note": "JSON-RPC over stdio (one newline-delimited JSON object per message — no embedded newlines, per the MCP stdio spec); tools/list returns parrot_init, parrot_extract, parrot_check, parrot_icu, parrot_rtl_audit, parrot_hreflang, parrot_pick, parrot_search_brain, parrot_explain. Resources: parrot://brain/* (the 6 read-only expertise files). HARD: no tool return contains a raw secret or a provider token — the MT/TMS tools return verdicts/handles, not tokens."
+    }
+  ],
+  "capabilities": ["init", "extract", "check", "icu", "rtl-audit", "hreflang", "pick", "brain", "explain"],
+  "plannedCapabilities": ["mt", "tms"],
+  "streaming": false,
+  "pushNotifications": false,
+  "stateTransitionHistory": false,
+  "defaultInputModes": ["text/plain", "application/json"],
+  "defaultOutputModes": ["application/json", "text/plain"],
+  "boundaryInvariant": "parrot owns i18n plumbing + the grammar engine + locale routing + the CI correctness gate; it NEVER authors the words (marketing/docs/prose copy, brand voice, human translation of long-form text → content employee / human translator, brain P29). mt/tms are advertised under plannedCapabilities — NOT capabilities — so the card never over-claims until those clusters land. The mt pipeline, when delivered, is a GOVERNED pipeline (catalog strings, glossary-gated, human-reviewed 20%, never ships unverified — brain O16) — translating-with-governance is plumbing; authoring is not. The EU-AI-Act legal posture on MT is stamp's; the target app's auth is badge's; its shell is pixel/turbo/acorn/rocket's. parrot never claims i18n 'done' from English alone (brain O7/O23).",
+  "skills": [
+    {
+      "id": "init",
+      "name": "Wire i18n correctly the first time",
+      "description": "Wire next-intl into a (Next.js) app: the 4 load-bearing files, version-detected middleware (proxy.ts on Next 16, middleware.ts before — brain P2), setRequestLocale codegen in every static page (P1), await params (P3), a deliberate localePrefix. THE acceptance step 1. The parrot init command / parrot_init tool.",
+      "tags": ["i18n", "next-intl", "next.js", "setup", "rsc", "proxy.ts"],
+      "cli": "node bin/parrot init --dir <app> --lib next-intl",
+      "mcpTool": "parrot_init",
+      "examples": ["Wire next-intl on this Next 16 app.", "Set up i18n routing the right way the first time."]
+    },
+    {
+      "id": "extract",
+      "name": "Find hardcoded user-facing strings",
+      "description": "Scan source for hardcoded user-facing strings (the catalog-bypass) + report used-but-missing / defined-but-unused keys; never constructs keys dynamically (brain O19). THE acceptance step 2. The parrot extract command / parrot_extract tool.",
+      "tags": ["i18n", "extract", "hardcoded-strings", "key-hygiene"],
+      "cli": "node bin/parrot extract --dir <app> --json",
+      "mcpTool": "parrot_extract",
+      "examples": ["Find every hardcoded string that skips the catalog.", "Which keys are used but missing, or defined but unused?"]
+    },
+    {
+      "id": "check",
+      "name": "Gate i18n correctness in CI",
+      "description": "The CI correctness gate: key-completeness + many-plural (distinct strings count=0,1,2,5 in pl/ar — brain S3) + RTL (dir + logical props + selective icon mirror — S7) + format (Intl-backed) + font-glyph + hreflang-graph (self-ref + reciprocal + valid BCP-47 + one x-default — S10/S11) + setRequestLocale-presence + Next-version-correct-middleware. Non-zero exit on any failure. THE acceptance step 3 + THE differentiator (JTBD-10). The parrot check command / parrot_check tool.",
+      "tags": ["i18n", "ci", "correctness-gate", "plural", "rtl", "hreflang", "differentiator"],
+      "cli": "node bin/parrot check --dir <app> --locales en,pl,ar,he --json",
+      "mcpTool": "parrot_check",
+      "examples": ["Gate i18n correctness in CI for en/pl/ar/he.", "Does this app pass the plural + RTL + hreflang checks?"]
+    },
+    {
+      "id": "icu",
+      "name": "Author / validate an ICU MessageFormat message",
+      "description": "Author or validate an ICU MessageFormat message: warns on missing plural categories for the locale (brain P6), the dash-in-select trap (P7), the apostrophe-escape trap (P8), and refuses concatenated fragments (O8/P9). The parrot icu command / parrot_icu tool.",
+      "tags": ["i18n", "icu", "messageformat", "plural", "select", "intl"],
+      "cli": "node bin/parrot icu \"<message>\" --locale ar",
+      "mcpTool": "parrot_icu",
+      "examples": ["Is this Polish plural message correct for count=2 and 5?", "Validate this ICU select message for Arabic."]
+    },
+    {
+      "id": "rtl-audit",
+      "name": "Audit RTL/bidi as a layout job",
+      "description": "RTL-as-coverage audit: flags bare margin-left / scaleX(-1)-blanket-mirror / letter-spacing on Arabic / missing dir (brain S7, P11/P12/P13); emits the per-component fix list. RTL is a layout + typography + bidi job, NOT 'translate the strings' (O11). The parrot rtl audit command / parrot_rtl_audit tool.",
+      "tags": ["i18n", "rtl", "bidi", "layout", "logical-properties", "icon-mirroring"],
+      "cli": "node bin/parrot rtl audit --dir <app>",
+      "mcpTool": "parrot_rtl_audit",
+      "examples": ["Arabic looks broken — audit the RTL coverage.", "Find the physical CSS properties that don't mirror in RTL."]
+    },
+    {
+      "id": "hreflang",
+      "name": "Validate the hreflang graph",
+      "description": "Validate/emit the hreflang graph as a CI-checked graph (self-ref, reciprocal, BCP-47, one x-default, separate canonical — brain S10/S11/S12); flags canonical-to-.com and geo-IP hard-redirect (O13/O15). The parrot seo hreflang command / parrot_hreflang tool.",
+      "tags": ["i18n", "seo", "hreflang", "bcp-47", "canonical", "locale-routing"],
+      "cli": "node bin/parrot seo hreflang --dir <app> --json",
+      "mcpTool": "parrot_hreflang",
+      "examples": ["Our localized pages vanished from Google — check the hreflang graph.", "Validate the hreflang reciprocity and the BCP-47 codes."]
+    },
+    {
+      "id": "pick",
+      "name": "Pick the i18n library deliberately",
+      "description": "Produce a library DECISION with the honest cost (not a feature table — brain O3): next-intl@^4 default for the RSC reason, the alts with their hidden costs (bundle bloat, bus-factor-1, bundler coupling). Check pushed_at not stars (O6). The parrot pick command / parrot_pick tool.",
+      "tags": ["i18n", "library-selection", "next-intl", "i18next", "lingui", "decision"],
+      "cli": "node bin/parrot pick --frameworks 1 --bundle-paramount",
+      "mcpTool": "parrot_pick",
+      "examples": ["Which i18n library for a single-framework RSC-heavy Next app?", "next-intl or i18next — give me the decision with the honest cost."]
+    },
+    {
+      "id": "brain",
+      "name": "Search the expertise brain (BM25)",
+      "description": "BM25 search over brain/**.md → ranked, cited hits naming the source file + the entry ID (P-/S-/O-/JTBD-). The same retrieval path the cockpit 'Ask the employee' view exposes. The parrot brain command / parrot_search_brain tool.",
+      "tags": ["i18n", "memory", "bm25", "brain", "retrieval"],
+      "cli": "node bin/parrot brain \"<query>\"",
+      "mcpTool": "parrot_search_brain",
+      "examples": ["What does parrot know about Polish plurals being wrong?", "Search the brain for RTL icon mirroring."]
+    },
+    {
+      "id": "explain",
+      "name": "Print a brain entry by ID",
+      "description": "Print a brain entry (e.g. P1 → the setRequestLocale footgun + detect + avoid; S3 → the Polish-plural scenario; O7 → never declare plurals done from English). The parrot explain command / parrot_explain tool.",
+      "tags": ["i18n", "brain", "explain", "pitfall", "scenario", "opinion"],
+      "cli": "node bin/parrot explain <P-id|S-id|O-id>",
+      "mcpTool": "parrot_explain",
+      "examples": ["Explain P1.", "What is scenario S7?"]
+    }
+  ]
+}
