@@ -1,0 +1,95 @@
+# parrot
+
+> The internationalization (i18n / l10n) employee for the Energy fleet — the **pipes + the grammar engine +
+> the routing + the CI correctness gate**. A tool-employee consumed by coding agents (Claude Code, the Energy
+> hub, sibling employees) via a CLI + an MCP server, and by the chairman via a local cockpit. It wires i18n
+> into a (Next.js) product correctly the first time and gates its correctness in CI.
+
+**The HARD boundary (read first):** parrot wires the pipeline that *carries and gates* the strings; it **never
+authors them**. Plumbing → parrot; content authoring (writing the marketing/docs/prose copy, the brand voice,
+human translation of long-form prose) → a content employee / a human translator. The instant a task is "write
+the copy / choose the tone / translate the prose," parrot hands it off and stops (pitfall P29).
+
+**The one belief:** test the 20% that's invisible in English — every correctness claim is tested in a
+many-plural language (`pl`/`ar`) AND an RTL language (`ar`/`he`), never declared "done" from English alone
+(opinion O7/O23).
+
+**Default stack (one line):** next-intl@^4 + ICU MessageFormat 1 + native `Intl.*`; Tolgee (OSS) / Lingo.dev
+(AI-CLI, pin exactly) for the TMS; subdirectory routing + reciprocal-hreflang SEO. MessageFormat 2 is
+**watch-list only** (zero 2026 adoption). The library is commoditized — the discipline (CI gate +
+plural/RTL/format eval) is the moat.
+
+## Start here
+
+- [AGENTS.md](AGENTS.md): the agent-facing contract — the full CLI + MCP tool list, the 12-JTBD quick-ref, the
+  NOT-list, and the HARD boundary.
+- [CLAUDE.md](CLAUDE.md): parrot's operating rules (the routing reflex, the spine).
+- [identity/SOUL.md](identity/SOUL.md): the parrot persona (the faithful-carrier voice; IS/DOES/REFUSES).
+- [memory/MEMORY.md](memory/MEMORY.md): the bootstrap spine (the boundary, the stack, the JTBD index).
+- [README.md](README.md): the human-facing overview.
+
+## The expertise brain (cited by ID — `JTBD-n` / `S-n` / `P-n` / `O-n`)
+
+- [brain/EXPERTISE-MAP.md](brain/EXPERTISE-MAP.md): the 12 jobs-to-be-done (JTBD-1…JTBD-12) — route any i18n
+  task here first.
+- [brain/BATTLE-TESTED-SCENARIOS.md](brain/BATTLE-TESTED-SCENARIOS.md): 16 real failure/migration scenarios
+  (S1…S16), each with an Eval-gate — the golden tasks.
+- [brain/KNOWN-PITFALLS.md](brain/KNOWN-PITFALLS.md): version-specific gotchas (P1…P29), each with a detect
+  signal + an avoid rule.
+- [brain/OPINIONS.md](brain/OPINIONS.md): the taste layer (O1…O25) — always-X / never-Y, each with a reason.
+- [brain/GAPS-AND-DISPUTES.md](brain/GAPS-AND-DISPUTES.md): the resolved stances + open questions + the soft
+  seams (the MT editorial sign-off and the EU-AI-Act legal posture are NOT parrot's).
+- [brain/TOOL-MATRIX.md](brain/TOOL-MATRIX.md): default-vs-alts for every category (runtime lib, ICU, TMS, MT,
+  CI linter, routing, typography, MCP) with the agent-access surface.
+
+## ID index (how to cite the brain)
+
+- `JTBD-1…12` — the jobs-to-be-done (the expertise map, linked above). Setup · ICU · Intl · RTL · routing+SEO ·
+  selection · key-hygiene · MT/TMS · typography · CI-eval · agent-ops · currency.
+- `S1…S16` — the battle-tested scenarios / golden tasks (the scenarios file, linked above).
+- `P1…P29` — the known pitfalls (the pitfalls file, linked above); P29 is the boundary pitfall.
+- `O1…O25` — the opinions / taste stances (the opinions file, linked above).
+- Query the brain directly: `parrot brain "<query>"` (BM25, ranked + cited) or `parrot explain <P-id|S-id|O-id>`.
+
+## Skills (parrot's taste, invokable from another harness)
+
+- [skills/i18n-setup-nextjs/SKILL.md](skills/i18n-setup-nextjs/SKILL.md): wire next-intl correctly first time
+  (JTBD-1; P1/P2/P3; S1/S2/S9).
+- [skills/icu-message-authoring/SKILL.md](skills/icu-message-authoring/SKILL.md): author/lint ICU messages
+  (JTBD-2; O7/O8; P6/P7/P8/P9; S3/S8/S14).
+- [skills/rtl-bidi-audit/SKILL.md](skills/rtl-bidi-audit/SKILL.md): RTL as a layout/bidi/typography job
+  (JTBD-4; O11/O12; P11–P14; S7).
+- [skills/hreflang-seo-graph/SKILL.md](skills/hreflang-seo-graph/SKILL.md): locale routing + the hreflang graph
+  (JTBD-5; O13/O14/O15; P15–P19; S10/S11/S12).
+- [skills/mt-tms-governance/SKILL.md](skills/mt-tms-governance/SKILL.md): governed MT + TMS pipeline (JTBD-8;
+  O16/O17/O18; P20–P24; S13).
+- [skills/i18n-font-fallback/SKILL.md](skills/i18n-font-fallback/SKILL.md): per-script `next/font` + Noto
+  fallback (JTBD-9; O24; P27/P28).
+
+## Sub-agents (fresh-context personas, callable via `Agent`)
+
+- [.claude/agents/i18n-correctness-auditor.md](.claude/agents/i18n-correctness-auditor.md): plural/RTL/format/
+  hreflang correctness in `pl`/`ar`/`he` — refuses to pass plurals tested only in English (O7; S3/S7/S10/S11).
+- [.claude/agents/i18n-migration-planner.md](.claude/agents/i18n-migration-planner.md): library-swap as a
+  full-component-surface refactor, not a one-liner (S4/S1/S2/S5).
+
+## Tools — the CLI (`parrot <command>`)
+
+`init` (wire next-intl) · `extract` (find hardcoded strings + key gaps) · `check` (the CI correctness gate,
+`--json`) · `icu` (validate an ICU message) · `rtl audit` · `fonts` · `seo hreflang` · `mt` (governed MT) ·
+`tms` (push/pull/status) · `pick` (library decision with the honest cost) · `brain` (BM25 over the brain) ·
+`explain` (print a brain entry) · `eval` (the L1/L2/L3 pyramid). `--help` / `--version` standard; `--json` on
+the data commands.
+
+## Tools — the MCP server (`parrot`, stdio; env-refs only, no live keys)
+
+`parrot_init` · `parrot_extract` · `parrot_check` · `parrot_icu` · `parrot_rtl_audit` · `parrot_hreflang` ·
+`parrot_pick` · `parrot_search_brain` · `parrot_explain`. It also exposes the six brain files (listed above)
+as `parrot://brain/*` resources — see `AGENTS.md` for the exact resource URIs.
+**HARD:** no tool return contains a raw secret or a provider token.
+
+## A2A card
+
+- [.well-known/agent.json](.well-known/agent.json): the agent-to-agent card — `name: parrot`, the delivered
+  `capabilities` (init/extract/check/icu/rtl-audit/hreflang/pick/brain/explain) and the separately-advertised
+  `plannedCapabilities` (mt/tms) so the card never over-claims.
