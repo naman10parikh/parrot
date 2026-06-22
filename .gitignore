@@ -23,4 +23,7 @@ packages/web/.next/
 # Obsidian temp files
 vault/Untitled*.base
 
+# parrot brain BM25 index — derived cache, self-rebuilds when stale (A4)
+brain/.brain-index.json
+
 .env
