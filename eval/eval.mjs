@@ -369,6 +369,13 @@ async function main(argv) {
     return 2;
   }
   const out = await runEval(level);
+  // --json: emit the structured result the eval already computed (the cockpit Eval-scores view, G1, consumes
+  // this — clean structured data instead of parsing the human report). Purely additive; existing callers that
+  // omit --json are unchanged. Exit code still tracks green/red so a `--json` run is still a usable gate.
+  if (args.includes("--json")) {
+    process.stdout.write(JSON.stringify(out, null, 2) + "\n");
+    return out.green ? 0 : 1;
+  }
   return report(out);
 }
 

@@ -26,6 +26,10 @@
     "dev": "tsc -p tsconfig.json --watch",
     "test": "vitest run",
     "test:watch": "vitest",
+    "eval": "node eval/eval.mjs --level 2",
+    "serve": "bash scripts/serve.sh",
+    "cockpit:smoke": "node scripts/cockpit-smoke.mjs",
+    "test:e2e": "playwright test",
     "parrot": "node bin/parrot",
     "prepublishOnly": "pnpm build && pnpm test"
   },
@@ -48,6 +52,7 @@
     "commander": "^12.1.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.0",
     "@types/node": "^22.10.0",
     "typescript": "^5.7.0",
     "vitest": "^2.1.0"

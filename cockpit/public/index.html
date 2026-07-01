@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>parrot — cockpit</title>
+    <!-- Energy design: Instrument Serif (display) + Poppins (body). Loaded from Google Fonts;
+         degrades to the local serif/sans stacks in styles.css if offline. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header>
+      <span class="brand">parrot<span class="dot">.</span></span>
+      <span class="tagline">carries your words into every locale correctly — it never authors them</span>
+      <span class="powered">powered by Energy</span>
+    </header>
+
+    <!-- parrot's defining creed, on every view (the JTBD-0 boundary one-liner) -->
+    <div class="boundary">
+      <b>parrot</b> carries the strings faithfully — right plural, right direction, right glyphs, right URL
+      &nbsp;·&nbsp; it <b>never authors</b> the words
+    </div>
+
+    <nav id="nav">
+      <button data-view="brain" class="active">Brain browser</button>
+      <button data-view="runs">Run log</button>
+      <button data-view="evals">Eval scores</button>
+      <button data-view="ask">Ask the employee</button>
+    </nav>
+
+    <main>
+      <!-- ── view: brain browser ─────────────────────────────────────────────────── -->
+      <section id="view-brain" class="view">
+        <h2 class="view-title">Brain browser</h2>
+        <p class="view-sub">
+          parrot's queryable memory layer — the 6 expertise files, with BM25 search returning ranked, cited hits.
+        </p>
+        <div class="search-row">
+          <input type="text" id="brain-q" placeholder="search the brain — e.g. polish plural, RTL mirroring, hreflang" />
+          <button class="go" id="brain-search-btn">Search</button>
+        </div>
+        <div id="brain-results"></div>
+        <div class="brain-grid">
+          <div class="brain-list" id="brain-list"><span class="loading">loading brain files…</span></div>
+          <div class="brain-content" id="brain-content"><span class="muted">Select a brain file to read it.</span></div>
+        </div>
+      </section>
+
+      <!-- ── view: run log ───────────────────────────────────────────────────────── -->
+      <section id="view-runs" class="view hidden">
+        <h2 class="view-title">Run log</h2>
+        <p class="view-sub">
+          Every <code class="mono">parrot</code> invocation + RSI cycle — the real
+          <code class="mono">logs/runs.jsonl</code> trail with per-command aggregates.
+        </p>
+        <div class="stat-row" id="runs-stats"></div>
+        <div class="card">
+          <table>
+            <thead>
+              <tr>
+                <th>time</th>
+                <th>cmd</th>
+                <th>jtbd</th>
+                <th>model</th>
+                <th>ms</th>
+                <th>outcome</th>
+                <th>findings</th>
+              </tr>
+            </thead>
+            <tbody id="runs-tbody">
+              <tr><td colspan="7" class="loading">loading run log…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── view: eval scores ───────────────────────────────────────────────────── -->
+      <section id="view-evals" class="view hidden">
+        <h2 class="view-title">Eval scores</h2>
+        <p class="view-sub">
+          The eval pyramid — L1 structural + the golden tasks (F1 ≥ 0.8, no self-grading) + the CI-blocking subset.
+        </p>
+        <div id="evals-body"><span class="loading">running the eval pyramid (builds first, ~3s)…</span></div>
+      </section>
+
+      <!-- ── view: ask the employee ──────────────────────────────────────────────── -->
+      <section id="view-ask" class="view hidden">
+        <h2 class="view-title">Ask the employee</h2>
+        <p class="view-sub">
+          parrot talking — runs the real CLI under the hood (<code class="mono">parrot check</code> gates a locale
+          tree; <code class="mono">parrot pick</code> makes a library call with the honest cost). It reports a
+          <b>verdict</b>, never invented copy.
+        </p>
+        <div class="ask-controls">
+          <select id="ask-verb">
+            <option value="check">check — validate a locale tree (the correctness gate)</option>
+            <option value="pick">pick — a library decision with the honest cost</option>
+          </select>
+          <input type="text" id="ask-dir" placeholder="dir (default eval/fixtures/app)" value="eval/fixtures/app" />
+          <button class="go" id="ask-btn">Ask</button>
+        </div>
+        <div id="ask-answer" class="answer"><span class="muted">Pick a question and ask.</span></div>
+
+        <!-- the load-bearing i18n differentiator: the /ar/ RTL render an assertion-only eval can't give -->
+        <div class="rtl-proof">
+          <h2 class="view-title" style="font-size:20px;margin-top:26px">RTL coverage proof — the <code class="mono">/ar/</code> render</h2>
+          <p class="view-sub" style="margin-bottom:12px">
+            A <b>real rendered DOM</b> — <code class="mono">&lt;html dir="rtl"&gt;</code> plus the Arabic plural rendered
+            <b>distinctly per CLDR category</b> via native <code class="mono">Intl.PluralRules</code>. This is the coverage
+            proof a string-diff eval structurally cannot produce (O11/O23).
+          </p>
+          <button class="go" id="rtl-btn">Render the /ar/ proof</button>
+          <div id="rtl-holder"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

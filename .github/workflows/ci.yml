@@ -62,3 +62,42 @@ jobs:
       - name: Skeleton phase
         if: steps.rt.outputs.armed == 'false'
         run: echo "skeleton phase — build gate auto-arms when package.json lands (CP123 Wave B)"
+
+  # ── G2 merge gate — DETERMINISTIC $0, no browser, no install. Boots the stdlib cockpit and asserts the 4
+  # view APIs + the /ar-proof RTL coverage render (`<html dir="rtl">` + 3 DISTINCT CLDR plurals — parrot's
+  # load-bearing i18n proof, O11/O23). Red-blocking on every push + PR. The real-browser E2E (cockpit-e2e
+  # below) is the ADDITIVE chromium layer; this is the gate that never flakes (D15 local-first).
+  cockpit-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Cockpit smoke — 4 views + /ar/ RTL coverage proof ($0, no chromium)
+        run: node scripts/cockpit-smoke.mjs
+
+  # ── G2 additive — the real-browser cockpit E2E (Playwright/chromium). BEST-EFFORT: chromium download on GH
+  # runners is intermittently flaky (the Wave-T lesson), so this NEVER blocks merge; the deterministic gate is
+  # cockpit-smoke above. It proves the 4 views + /ar/ dir="rtl" render in a real browser when chromium is up.
+  cockpit-e2e:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install + build
+        run: |
+          pnpm install --frozen-lockfile || pnpm install
+          pnpm build
+      - name: Install chromium (no --with-deps — avoids the sudo apt hang; retry once)
+        run: timeout 200 pnpm exec playwright install chromium || timeout 200 pnpm exec playwright install chromium
+      - name: Playwright cockpit E2E (real browser; additive, non-blocking)
+        run: pnpm exec playwright test

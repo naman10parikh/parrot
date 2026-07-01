@@ -32,6 +32,11 @@ dist/
 # parrot RSI deterministic-loop proposal output — derived, never committed (D2; keeps the tree clean post-run)
 .rsi/
 
+# Playwright cockpit-E2E artifacts — regenerated each run; the spec is the source of truth (G2)
+test-results/
+playwright-report/
+.playwright/
+
 # Secrets: ignore every .env variant, but KEEP the committed template (F3).
 # The negation MUST come after the ignore line — git applies the last match.
 .env*
