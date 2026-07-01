@@ -37,3 +37,14 @@
 {"ts":"2026-07-01T02:47:33.224Z","cmd":"mt","jtbd":null,"model":"claude-opus-4-8[1m]","duration_ms":1,"outcome":"error","findings_count":0}
 {"ts":"2026-07-01T02:47:33.358Z","cmd":"seo","jtbd":null,"model":"claude-opus-4-8[1m]","duration_ms":0,"outcome":"error","findings_count":0}
 {"ts":"2026-07-01T02:48:35.194Z","cmd":"check","jtbd":10,"model":"claude-opus-4-8[1m]","duration_ms":12,"outcome":"fail","findings_count":1}
+{"ts":"2026-07-01T03:47:56.671Z","cmd":"check","jtbd":10,"model":"claude-opus-4-8[1m]","duration_ms":17,"outcome":"fail","findings_count":1}
+{"ts":"2026-07-01T03:58:17.267Z","cmd":"check","jtbd":10,"model":"claude-opus-4-8[1m]","duration_ms":18,"outcome":"fail","findings_count":1}
+{"ts":"2026-07-01T04:01:26.528Z","cmd":"check","jtbd":10,"model":"claude-opus-4-8[1m]","duration_ms":9,"outcome":"fail","findings_count":1}
+{"ts":"2026-07-01T04:06:08.846Z","verb":"sandbox-boot","model":"claude-opus-4-8[1m]","mode":"e2b-live-boot","sandboxId":"if7ww691m3q2fsviuufoe","coldStartMs":273.2,"coldStartOk":true,"coldStartTargetMs":500,"pass":false,"plPluralGapCaught":true,"failures":1,"arRenderOk":true,"invariantHeld":true}
+{"ts":"2026-07-01T04:06:22.457Z","verb":"sandbox-boot","model":"claude-opus-4-8[1m]","mode":"e2b-live-boot","sandboxId":"idzlvjzm71ekmykvtzgo8","coldStartMs":220.3,"coldStartOk":true,"coldStartTargetMs":500,"pass":false,"plPluralGapCaught":true,"failures":1,"arRenderOk":true,"invariantHeld":true}
+{"ts":"2026-07-01T04:06:34.467Z","cmd":"check","jtbd":10,"model":"claude-opus-4-8[1m]","duration_ms":9,"outcome":"fail","findings_count":1}
+{"ts":"2026-07-01T04:06:34.580Z","verb":"sandbox-boot","model":"claude-opus-4-8[1m]","mode":"local-$0-fallback","reason":"E2B_API_KEY absent — ran parrot check + /ar/ render on the host (D15 local-first). E2B live boot pending the key (S-E2B).","localMs":178.7,"pass":false,"plPluralGapCaught":true,"failures":1,"arRenderOk":true,"invariantHeld":true}
+{"ts":"2026-07-01T04:09:33.283Z","cmd":"init","jtbd":1,"model":"claude-opus-4-8[1m]","duration_ms":3,"outcome":"pass","findings_count":0}
+{"ts":"2026-07-01T04:09:33.402Z","cmd":"extract","jtbd":7,"model":"claude-opus-4-8[1m]","duration_ms":9,"outcome":"fail","findings_count":3}
+{"ts":"2026-07-01T04:09:33.521Z","cmd":"check","jtbd":10,"model":"claude-opus-4-8[1m]","duration_ms":8,"outcome":"fail","findings_count":1}
+{"ts":"2026-07-01T04:12:18.007Z","verb":"sandbox-boot","model":"claude-opus-4-8[1m]","mode":"e2b-live-boot","sandboxId":"iboifpaldq0o9y4ghuw22","coldStartMs":298.4,"coldStartOk":true,"coldStartTargetMs":500,"pass":false,"plPluralGapCaught":true,"failures":1,"arRenderOk":true,"invariantHeld":true}

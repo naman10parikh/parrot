@@ -101,3 +101,32 @@ jobs:
         run: timeout 200 pnpm exec playwright install chromium || timeout 200 pnpm exec playwright install chromium
       - name: Playwright cockpit E2E (real browser; additive, non-blocking)
         run: pnpm exec playwright test
+
+  # ── Sandbox / Infra (Component 11 / E4) — the REAL E2B Firecracker boot. ADDITIVE, secret-gated,
+  # NON-BLOCKING: `sandbox/boot.mjs` does a real `Sandbox.create`, copies dist/ + the acceptance
+  # fixture INTO the microVM, runs `parrot check` (asserting the PLANTED pl plural gap is caught) +
+  # the `/ar/` render proof (dir="rtl" + distinct Arabic plural) INSIDE the sandbox, records the cold
+  # start to logs/runs.jsonl, and tears down. This is the SANDBOX-COMPONENT gate, NOT the merge gate —
+  # `continue-on-error:true` + `push`-only means it can NEVER turn the merge gate red (the merge gates
+  # are acceptance.yml on ubuntu + build-test + cockpit-smoke, all $0/no-creds, D15). Absent
+  # E2B_API_KEY, boot.mjs runs the SAME two proofs on the host ($0 fallback) and still exits 0. The
+  # heavy live `next dev` HTTP /ar/ render stays the on-demand acceptance-e2b.yml path.
+  sandbox-boot:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile || pnpm install
+      - run: pnpm build
+      - name: E2B sandbox-boot (parrot check + /ar/ render in-VM; $0 host fallback if no key — additive, never blocks)
+        env:
+          E2B_API_KEY: ${{ secrets.E2B_API_KEY }}
+        run: node sandbox/boot.mjs

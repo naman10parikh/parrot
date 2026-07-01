@@ -44,7 +44,39 @@ node sandbox/render-ar.mjs --mode live    # boots `next dev`, GETs /ar/, asserts
 - **Break-even:** the live E2B render is for the Sandbox-component proof + manual confidence, not per-commit CI —
   per-commit isolation is satisfied by the ubuntu runner at $0 (no E2B minutes burned on every push).
 
+## `boot.mjs` — the REAL Firecracker `Sandbox.create` boot (the Sandbox-component ✅)
+
+`sandbox/boot.mjs` is the actual E2B integration point (mirrors `pigeon/sandbox/boot.mjs`). When
+`E2B_API_KEY` is present (inherited from energy's `.env`, or a CI secret) it:
+
+1. **boots a real E2B microVM** (`Sandbox.create`) and MEASURES the cold start (≤500ms target),
+2. copies the compiled `dist/` + the acceptance fixture (`eval/fixtures/app`) + `render-ar.mjs` + the
+   one runtime dep (`commander`, zero transitive deps) INTO the VM — **no in-VM `npm install`** (parrot
+   `check` is 1-dep, `render-ar --mode local` is pure stdlib/`Intl`; the whole reason the lib avoids
+   FormatJS's NAPI parser, P25),
+3. writes a tiny `run.mjs` launcher into the VM (Node 20 — the E2B default template — refuses the
+   extensionless `bin/parrot` under `"type":"module"`; `run.mjs` imports `main` and is node-version-agnostic),
+4. runs `parrot check` INSIDE the VM asserting the PLANTED `pl` plural gap is caught
+   (`pass:false` + `{check:"plural",locale:"pl"}` — S3/P6),
+5. runs the `/ar/` render proof INSIDE the VM asserting `<html dir="rtl">` + a distinct Arabic plural
+   (O11/O23), then **tears the sandbox down**,
+6. appends a `{verb:"sandbox-boot",mode,sandboxId,coldStartMs,pass,plPluralGapCaught,arRenderOk,invariantHeld}`
+   row to `logs/runs.jsonl`.
+
+When `E2B_API_KEY` is **absent**, it runs the SAME two proofs on the host (`mode:"local-$0-fallback"`,
+exit 0) so the additive CI job never blocks on a cred (D15). Wired as the `sandbox-boot` job in
+`.github/workflows/ci.yml` (`push`-only, `continue-on-error:true` → never merge-blocking). Run it directly:
+
+```bash
+node sandbox/boot.mjs   # E2B live boot if E2B_API_KEY present, else the $0 host run
+```
+
+`Dockerfile` (`node:22-slim` + git) is the portable image for a local `docker run` alt (mirrors
+`pigeon`/`hush`); the CI job runs `boot.mjs` directly on ubuntu, so Docker is optional.
+
 ## Files
 
+- `boot.mjs` — the real `Sandbox.create` E2B boot: `parrot check` + `/ar/` render IN the VM, cold-start telemetry, $0 host fallback.
+- `Dockerfile` — `node:22-slim`+git portable image (local `docker run` alt; CI runs `boot.mjs` directly).
 - `render-ar.mjs` — the `/ar/` render proof (auto-detect live/local; asserts `dir="rtl"` + distinct ar plural).
 - `README.md` — this file.
