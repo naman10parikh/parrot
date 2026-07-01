@@ -227,7 +227,9 @@ async function ask() {
   const out = $("#ask-answer");
   out.innerHTML = `<span class="loading">parrot is thinking (running \`parrot ${esc(verb)}\`)…</span>`;
   try {
-    const body = verb === "check" ? { action: "check", dir } : { action: "pick" };
+    // Only `check` is exposed: it runs the real `parrot check` correctness gate. (The `pick` CLI verb is
+    // deliberately stubbed pending its owning cluster, so the cockpit must not surface it as a working action.)
+    const body = { action: "check", dir };
     const r = await fetch("/api/action", {
       method: "POST",
       headers: { "content-type": "application/json" },
