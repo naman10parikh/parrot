@@ -33,16 +33,19 @@ jobs:
         run: |
           set -e
           node bin/parrot init    --dir eval/fixtures/app --lib next-intl
-          node bin/parrot extract --dir eval/fixtures/app --json > /tmp/extract.json
-          node bin/parrot check   --dir eval/fixtures/app --locales en,pl,ar --json > /tmp/check.json
+          # extract/check are LINTERS: they exit 1 when they find issues (the fixture PLANTS a hardcoded
+          # string + a pl plural gap on purpose), so their non-zero exit is expected. We still need their
+          # JSON — `|| true` keeps the redirect but lets the flow proceed; assert.mjs is the real §5 gate.
+          node bin/parrot extract --dir eval/fixtures/app --json > /tmp/extract.json || true
+          node bin/parrot check   --dir eval/fixtures/app --locales en,pl,ar --json > /tmp/check.json || true
           node eval/acceptance/assert.mjs /tmp/extract.json /tmp/check.json
       - name: pass^k — run the acceptance flow 3× (no flake; k≥3)
         run: |
           set -e
           for k in 1 2 3; do
             node bin/parrot init    --dir eval/fixtures/app --lib next-intl >/dev/null
-            node bin/parrot extract --dir eval/fixtures/app --json > /tmp/extract.json
-            node bin/parrot check   --dir eval/fixtures/app --locales en,pl,ar --json > /tmp/check.json
+            node bin/parrot extract --dir eval/fixtures/app --json > /tmp/extract.json || true
+            node bin/parrot check   --dir eval/fixtures/app --locales en,pl,ar --json > /tmp/check.json || true
             node eval/acceptance/assert.mjs /tmp/extract.json /tmp/check.json >/dev/null
             echo "acceptance pass $k/3 green"
           done
