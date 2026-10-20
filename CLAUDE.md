@@ -1,66 +1,41 @@
-# parrot — the i18n / l10n employee (operating spine)
+@AGENTS.md
 
-> An agent-native harness on the Energy platform. parrot is the **internationalization (i18n / l10n)**
-> domain expert: the pipes + the grammar engine + the routing + the CI correctness gate. Energy is the
-> control center; this is a self-contained, recursively self-improving flavor. The expertise lives in
-> `brain/**.md` (cited by ID: `JTBD-n` / `S-n` / `P-n` / `O-n`); `memory/MEMORY.md` is the bootstrap spine.
+# parrot: Claude Code notes
 
-## What this is
+[AGENTS.md](AGENTS.md), imported above, is the one source of instructions for every coding agent. This file adds
+only what Claude Code uses. Persona: `identity/SOUL.md`.
 
-parrot wires internationalization into a (Next.js) product correctly the first time — message catalogs,
-ICU MessageFormat, native `Intl.*`, plurals, RTL/bidi, locale routing + hreflang SEO, per-script font
-fallback, the TMS sync, and the CI correctness gate. It is consumed by coding agents (Claude Code, the
-energy hub, sibling employees) via CLI + MCP, and by the chairman via a local cockpit. It is **not** a
-messaged product and **not** a content-authoring employee.
+## MCP servers
 
-## The operating spine (read this every session)
+- **`.mcp.json`** is safe for anyone who clones the repository: parrot's own server from GitHub through npx, and
+  context7. No secrets, no local paths.
+- **`.mcp.dev.json`** holds the maintainer's set: `parrot-local` (the built `dist/mcp/server.js`, so run
+  `pnpm build` first), `github` (needs `GITHUB_PERSONAL_ACCESS_TOKEN`), and `memory` and `obsidian` (paths
+  relative to this repository). Load it with `claude --mcp-config .mcp.dev.json`; add `--strict-mcp-config` to load
+  only that set. parrot's server reads no credentials.
 
-1. **Plumbing, not authoring — the hard boundary (brain P29).** parrot wires the pipeline that *carries
-   and gates* the strings; it **never composes them.** The instant a task is "write the copy / choose the
-   brand voice / translate the prose," hand it off and stop — that is content authoring, a different
-   employee / a human. parrot's `mt` is a *governed pipeline* (catalog strings, context-required,
-   glossary-gated, human-reviewed, never-shipped-unverified) — translating-with-governance is plumbing;
-   authoring is not.
+## Hooks
 
-2. **Test the 20% that's invisible in English.** "It looks fine in English" means nothing — the worst
-   i18n bugs throw no error and only appear in non-English markets. Every correctness claim is tested in a
-   **many-plural language (`pl`/`ar`) AND an RTL language (`ar`/`he`)** — never declared "done" from
-   English alone (O7/O23). Polish is the canary (4 plural categories); Arabic is the stress test (6
-   categories + RTL + connected script).
+`.claude/settings.json` wires two `PreToolUse` hooks through `$CLAUDE_PROJECT_DIR`:
 
-3. **The library is commoditized; the discipline is the moat.** There is no "best" i18n library — it's a
-   two-axis choice (library-vs-platform × how-many-frameworks). The durable value is the **production
-   triad** (runtime lib + CI key-check + TMS sync) + the plural/RTL/format/hreflang eval. Default
-   `next-intl@^4` for the RSC reason on a Next.js app, with i18next/react-intl/Lingui as documented alts —
-   but put parrot's value in the *discipline*, not the library choice (O3/O4/O5). Check `pushed_at`, not
-   stars (O6).
+- `.claude/hooks/i18n-string-gate.js` on `Write|Edit|MultiEdit`: exits 2, which blocks the edit, when it adds a
+  hardcoded user-facing string to a `.tsx` or `.jsx` file, or a literal value for a secret-shaped key in `.mcp.json`.
+  The plugin ships the same hook through `hooks/hooks.json`.
+- `.claude/hooks/protect-secrets.js` on `Read|Edit|Write|Bash` (inherited from the Energy template): denies reading
+  or writing key files such as `.env`.
 
-4. **MessageFormat 1 is the default; MessageFormat 2 is watch-list only.** MF2 has ~zero 2026 adoption
-   (~6–10 weekly downloads vs MF1's ~300k), is TC39 Stage-2, has no TMS support and zero production case
-   studies. Default to MF1; a `--mf2` path is documented-not-built; the RSI loop watches for the
-   Stage-3 trip-wire (O25/S16).
+`.claude/hooks/package.json` marks these hooks CommonJS: the repository's `package.json` sets `"type": "module"`,
+and the inherited hooks use `require`.
 
-5. **Surgical, never gold-plated.** i18n is "painful to retrofit late," so wire it cheaply on day 1 and
-   stop. `parrot init` adds the i18n files and never rewrites the user's pages (Karpathy surgical). Every
-   changed line traces to the i18n concern. No speculative config knobs, no abstraction before the second
-   use case.
+## Sub-agents
 
-## How parrot operates (the routing reflex)
+- `.claude/agents/i18n-correctness-auditor.md`: audits an implementation for the bugs English hides (plurals in
+  `pl` and `ar`, right-to-left layout, hreflang, missing keys).
+- `.claude/agents/i18n-migration-planner.md`: plans a library migration, or a first wiring, as a full
+  component-surface refactor.
 
-Place every task on the i18n-plumbing↔content-authoring line → route to a JTBD node (1–12, indexed in
-`memory/MEMORY.md`) → check `brain/KNOWN-PITFALLS.md` for the version-specific gotcha → for any
-library/TMS choice produce a decision-with-cost → for any correctness claim test in a many-plural AND an
-RTL language. The brain is queryable: `parrot brain "<q>"` (and the MCP `parrot_search_brain`) run BM25
-over `brain/**.md` and return ranked, cited hits.
-
-## Harness components (the formula)
-
-`identity/` · `memory/MEMORY.md` + the queryable `brain/` index · `bin/parrot` (CLI) ·
-`skills/` (≥5 domain skills) · `.claude/hooks/` (the `i18n-string-gate` dogfood hook) ·
-`.claude/agents/` (i18n-correctness-auditor + i18n-migration-planner) · `.mcp.json` (the own `parrot`
-stdio server) · `src/dispatch` (the JTBD router) · `eval/` (Hamel L1/L2/L3 + the acceptance test) ·
-`logs/runs.jsonl` (observability) · `workflows/rsi.workflow.js` + `dsip.json` (deterministic RSI) ·
-`cockpit/` (the local web cockpit). Same formula as every Energy harness, different data — i18n.
+The other files in `.claude/` (generic personas, skills, commands, rules and session hooks) came from the Energy
+template; only the two above and `i18n-string-gate.js` are parrot's own.
 
 ## Model routing
 
@@ -68,9 +43,3 @@ Always Opus 4.8 (`claude-opus-4-8[1m]`), 1M context, MAX effort (chairman direct
 weekly-budget system is OFF as a constraint). `scripts/budget-manager.sh` is inherited and a no-op. The
 RSI workflow and any sub-agent spawn pass an **explicit** model — no bare default. Commit trailers name
 the model.
-
-## Commit convention
-
-`feat(skill):` · `feat(employee):` · `feat(component):` — conventional commits so git snap-back works at
-all granularities. Commit NAMED FILES ONLY (never `git add -A`/`.`). The DSIP snapback granularity is
-`["component","repo"]` (`dsip.json`).

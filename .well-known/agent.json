@@ -9,7 +9,7 @@
     "url": "https://github.com/naman10parikh/parrot"
   },
   "preferredTransport": "stdio",
-  "url": "stdio://parrot",
+  "url": "https://github.com/naman10parikh/parrot",
   "endpoint": "stdio:node dist/mcp/server.js",
   "additionalInterfaces": [
     {

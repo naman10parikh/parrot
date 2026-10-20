@@ -1,0 +1,13 @@
+{
+  "description": "parrot's i18n-string-gate: blocks an edit that adds a hardcoded user-facing string to a .tsx or .jsx file, so every string goes through the message catalog.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/i18n-string-gate.js\"" }
+        ]
+      }
+    ]
+  }
+}

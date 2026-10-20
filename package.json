@@ -4,7 +4,8 @@
   "description": "The i18n/l10n employee — wires next-intl, finds hardcoded strings, validates ICU plurals + RTL + hreflang in CI. Plumbing, not copywriting.",
   "type": "module",
   "bin": {
-    "parrot": "./bin/parrot"
+    "parrot": "./bin/parrot",
+    "parrot-mcp": "./dist/mcp/server.js"
   },
   "main": "./dist/cli/index.js",
   "types": "./dist/cli/index.d.ts",
@@ -24,6 +25,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
+    "prepare": "tsc -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "eval": "node eval/eval.mjs --level 2",

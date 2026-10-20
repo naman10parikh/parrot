@@ -1,0 +1,17 @@
+{
+  "name": "parrot",
+  "version": "0.1.0",
+  "description": "Localisation for Next.js, checked in CI: plurals, right-to-left and search engines.",
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "parrot": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "-p",
+        "github:naman10parikh/parrot",
+        "parrot-mcp"
+      ]
+    }
+  }
+}

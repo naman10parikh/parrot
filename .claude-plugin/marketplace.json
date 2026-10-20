@@ -1,0 +1,17 @@
+{
+  "name": "parrot",
+  "owner": {
+    "name": "Naman Parikh",
+    "url": "https://github.com/naman10parikh"
+  },
+  "metadata": {
+    "description": "Parrot, the localisation agent employee: wires next-intl, finds hardcoded strings and checks plurals, right-to-left layouts and hreflang in CI."
+  },
+  "plugins": [
+    {
+      "name": "parrot",
+      "source": "./",
+      "description": "Localisation for Next.js, checked in CI: plurals, right-to-left and search engines."
+    }
+  ]
+}
