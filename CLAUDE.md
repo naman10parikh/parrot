@@ -39,7 +39,7 @@ template; only the two above and `i18n-string-gate.js` are parrot's own.
 
 ## Model routing
 
-Always Opus 4.8 (`claude-opus-4-8[1m]`), 1M context, MAX effort (chairman directive 2026-06-17; the
+Always the latest flagship Opus (Claude Code's default, or the alias `opus`; never a model ID), 1M context, MAX effort (chairman directive 2026-06-17; the
 weekly-budget system is OFF as a constraint). `scripts/budget-manager.sh` is inherited and a no-op. The
 RSI workflow and any sub-agent spawn pass an **explicit** model — no bare default. Commit trailers name
 the model.
