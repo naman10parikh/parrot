@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/i18n-string-gate.js"
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/i18n-string-gate.js\""
           }
         ]
       },
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/protect-secrets.js"
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/protect-secrets.js\""
           }
         ]
       }
