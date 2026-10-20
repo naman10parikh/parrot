@@ -15,8 +15,8 @@
  *
  * MODEL ROUTING (D12/D14): this engine + any agent it would spawn run on Opus, max effort, never a bare
  * default. The deterministic half spawns NO model (it's pure Node + `npm view`); the deferred Claude half,
- * when it lights up, MUST pass this model explicitly.
- *   model: "claude-opus-4-8[1m]"
+ * when it lights up, MUST pass this model explicitly: the alias, which moves to each new Opus by itself.
+ *   model: "opus"
  *
  * Robustness: `npm view` may be unreachable (offline CI / sandbox) — each lookup is guarded; a network failure
  * degrades to "unavailable" and the run still completes green (the engine is informational on the deterministic
@@ -30,8 +30,8 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-/** The model this RSI loop runs on (D12/D14 — explicit, never a bare default). */
-export const MODEL = "claude-opus-4-8[1m]";
+/** The model this RSI loop runs on (D12/D14: explicit, never a bare default, never a fixed ID). */
+export const MODEL = "opus";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PROPOSAL_DIR = join(REPO_ROOT, ".rsi");

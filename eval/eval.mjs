@@ -277,7 +277,7 @@ function runL3(tasks) {
     source: t.source,
     // The judge call is the deferred Claude-half cost. Absence of a token is NOT a gap (D8) — report
     // judge-deferred, never a fake PASS. (When the token lands, this is where the rubric.md judge call runs,
-    // passing model "claude-opus-4-8[1m]" explicitly per D14.)
+    // passing the model alias "opus" explicitly per D14.)
     status: hasToken ? "judge-ready" : "judge-deferred",
   }));
 }

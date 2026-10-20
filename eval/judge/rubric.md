@@ -35,8 +35,8 @@ plus the prose `gate`. The judge is told to read them as the rubric, not to inve
 
 ## Model routing (D12/D14)
 
-The judge call MUST pass an explicit model — `claude-opus-4-8[1m]`, max effort — never a bare default
-(D14: always Opus). The call is the deferred Claude-half cost; the deterministic L1+L2 pyramid is $0.
+The judge call MUST pass an explicit model: the alias `opus`, max effort, never a bare default and
+never a fixed ID (D14: always Opus). The call is the deferred Claude-half cost; the deterministic L1+L2 pyramid is $0.
 
 ## Tasks graded here
 
