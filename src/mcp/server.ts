@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * parrot MCP server (stdio) — C1 / PLAN §3 Component 7 / §4 "MCP server tool list" / HARNESS-OVERRIDES §7.
  *
@@ -22,7 +23,7 @@
  * (incl. Claude Code) renders them; the structured payload is the JSON inside that text (agent-parseable).
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { serveStdio, type RpcHandler } from "./jsonrpc.js";
@@ -385,7 +386,15 @@ export function startServer(): void {
   serveStdio(METHODS);
 }
 
-// Entry point: `node dist/mcp/server.js` speaks JSON-RPC on stdio.
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Entry point: `node dist/mcp/server.js` (or the parrot-mcp bin) speaks JSON-RPC on stdio. npx starts a bin
+// through a symlink in node_modules/.bin, so resolve argv[1] before comparing it with this module's path.
+function entryPath(): string {
+  try {
+    return process.argv[1] ? realpathSync(process.argv[1]) : "";
+  } catch {
+    return process.argv[1] ?? ""; // Intentionally silent: an unresolvable argv[1] falls back to the raw path.
+  }
+}
+if (entryPath() !== "" && entryPath() === fileURLToPath(import.meta.url)) {
   startServer();
 }
