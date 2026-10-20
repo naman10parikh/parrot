@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it as below.
+title: "Parrot: Localisation for Next.js, checked in CI: plurals, right-to-left and search engines."
+type: software
+authors:
+  - family-names: Parikh
+    given-names: Naman
+repository-code: "https://github.com/naman10parikh/parrot"
+license: MIT
+version: "0.1.0"
+abstract: "Localisation for Next.js, checked in CI: plurals, right-to-left and search engines."
+keywords: ["agent-native", "i18n", "nextjs", "localization"]
