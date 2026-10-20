@@ -13,13 +13,13 @@
       "ship"
     ]
   },
-  "selection": "performance-novelty",
+  "selection": "performance",
   "eval": {
     "rubric": "eval/eval.mjs (Hamel L1 assertions + L2 binary golden tasks from brain/BATTLE-TESTED-SCENARIOS.md graded vs each scenario Eval-gate + L3 trajectory judge; the acceptance test is the top integration eval)",
     "gate": "no-regression && all-pass"
   },
   "snapback": {
-    "granularity": ["component", "repo"],
+    "granularity": ["skill", "employee"],
     "vcs": "git"
   },
   "externalIntelligence": {
