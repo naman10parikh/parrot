@@ -41,4 +41,6 @@ Every error → root cause → rule. Auto-compressed when >500 lines (memory-com
 - **Root cause:** the start check compared `import.meta.url` with `file://` plus the raw `process.argv[1]`, which is
   the symlink, not the module.
 - **Rule:** compare `realpathSync(process.argv[1])` with `fileURLToPath(import.meta.url)`, put a shebang on every
-  bin target, and prove each bin through `npx -y -p github:naman10parikh/parrot <bin>` from an empty folder.
+  bin target, and prove each bin through `npx -y -p github:naman10parikh/parrot <bin>` from an empty folder. List
+  every file a command loads at run time in the package `files`: through npx, `parrot brain` and
+  `parrot_search_brain` failed until `scripts/brain-search.mjs` was shipped.
