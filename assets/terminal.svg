@@ -26,7 +26,7 @@
 <text x="24" y="426" fill="#d8d3c8" xml:space="preserve">                              defined-but-unused keys; never builds keys</text>
 <text x="24" y="446" fill="#d8d3c8" xml:space="preserve">                              dynamically (O19) [acceptance step 2]</text>
 <text x="24" y="466" fill="#d8d3c8" xml:space="preserve">  check [options] [dir]       the CI correctness gate: key-completeness +</text>
-<text x="24" y="486" fill="#d8d3c8" xml:space="preserve">                              many-plural (pl/ar) + RTL + format + font-glyph +</text>
+<text x="24" y="486" fill="#d8d3c8" xml:space="preserve">                              many-plural (pl/ar) + RTL + format +</text>
 <text x="24" y="506" fill="#d8d3c8" xml:space="preserve">                              hreflang-graph + setRequestLocale-presence +</text>
 <text x="24" y="526" fill="#d8d3c8" xml:space="preserve">                              version-correct-middleware; non-zero on any</text>
 <text x="24" y="546" fill="#d8d3c8" xml:space="preserve">                              failure [acceptance step 3]</text>
