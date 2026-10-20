@@ -37,7 +37,7 @@ export interface LogEntry {
 }
 
 /** The model identity recorded in run lines (D14: always Opus, max effort). */
-export const PARROT_MODEL = process.env["ANTHROPIC_MODEL"] ?? "claude-opus-4-8[1m]";
+export const PARROT_MODEL = process.env["ANTHROPIC_MODEL"] ?? "default";
 
 /**
  * Emit one run-line. Delegates to E3's `src/lib/logger.ts#logRun` if present; otherwise a silent no-op (the
