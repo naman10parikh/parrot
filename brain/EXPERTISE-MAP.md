@@ -93,7 +93,7 @@ Polish" bugs live. Full grammar trap list in [[parrot KNOWN-PITFALLS]].
   `=N` exact match beats category tags. The 6 category tags are **`zero` `one` `two` `few` `many` `other`**
   (`other` is the required fallback). **The critical fact: you must author a translation for every category the
   target language uses, or the renderer falls to `other` and produces grammatically wrong text** — with NO
-  error. English has 2 forms; Chinese 1; Polish 4 (one/few/many/other); **Arabic [removed]** (zero/one/two/few/many/
+  error. English has 2 forms; Chinese 1; Polish 4 (one/few/many/other); **Arabic 6** (zero/one/two/few/many/
   other). Source: `ecosystem-03` §B2; `ecosystem-04` §B.
 - **2.2 The deepest pluralization lesson in the whole corpus: languages with >2 plural categories will render
   the WRONG form if CLDR plural data isn't loaded — invisibly to an English speaker.** The FormatJS landmark

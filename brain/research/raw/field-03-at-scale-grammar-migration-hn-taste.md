@@ -52,7 +52,7 @@ Source: [Localazy — Beyond interpolation](https://localazy.com/blog/beyond-int
 - **Plural-category counts differ wildly — verbatim:** *"The Czech language has three [plural forms], Arabic
   six, and in Japanese, there is only one form."* So a hardcoded `count !== 1 ? "s" : ""` (English binary) is
   wrong in *most* languages. (Cross-ref field-01 #2423: Polish has 4 — one/few/many/other — and that's exactly
-  where i18next's plural resolution bug surfaced.) **Arabic has [removed] categories: zero, one, two, few, many,
+  where i18next's plural resolution bug surfaced.) **Arabic has 6 categories: zero, one, two, few, many,
   other** — most devs don't even know `zero` and `two` are distinct categories.
 - **Multiple plurals in one sentence:** `"{count1} apples and {count2} oranges"` — two *independent* plural
   axes. Naive single-`{count}` plural blocks can't express it; needs nested/compound ICU or MF2.
