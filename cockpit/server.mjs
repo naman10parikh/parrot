@@ -292,6 +292,6 @@ function parsePort(argv) {
 }
 
 const PORT = parsePort(process.argv.slice(2));
-server.listen(PORT, () => {
-  process.stdout.write(`parrot cockpit → http://localhost:${PORT}  (brain · runs · evals · ask)\n`);
+server.listen(PORT, "127.0.0.1", () => {
+  process.stdout.write(`parrot cockpit → http://127.0.0.1:${PORT}  (brain · runs · evals · ask)\n`);
 });

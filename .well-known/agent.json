@@ -53,7 +53,7 @@
     {
       "id": "check",
       "name": "Gate i18n correctness in CI",
-      "description": "The CI correctness gate: key-completeness + many-plural (distinct strings count=0,1,2,5 in pl/ar — brain S3) + RTL (dir + logical props + selective icon mirror — S7) + format (Intl-backed) + font-glyph + hreflang-graph (self-ref + reciprocal + valid BCP-47 + one x-default — S10/S11) + setRequestLocale-presence + Next-version-correct-middleware. Non-zero exit on any failure. THE acceptance step 3 + THE differentiator (JTBD-10). The parrot check command / parrot_check tool.",
+      "description": "The CI correctness gate: key-completeness + many-plural (distinct strings count=0,1,2,5 in pl/ar — brain S3) + RTL (dir + logical props + selective icon mirror — S7) + format (Intl-backed) + hreflang-graph (self-ref + reciprocal + valid BCP-47 + one x-default — S10/S11) + setRequestLocale-presence + Next-version-correct-middleware. Non-zero exit on any failure. THE acceptance step 3 + THE differentiator (JTBD-10). The parrot check command / parrot_check tool.",
       "tags": ["i18n", "ci", "correctness-gate", "plural", "rtl", "hreflang", "differentiator"],
       "cli": "node bin/parrot check --dir <app> --locales en,pl,ar,he --json",
       "mcpTool": "parrot_check",

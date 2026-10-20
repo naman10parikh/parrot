@@ -104,7 +104,7 @@ export async function main(argv: string[]): Promise<void> {
 
   program
     .command("check")
-    .description("the CI correctness gate: key-completeness + many-plural (pl/ar) + RTL + format + font-glyph + hreflang-graph + setRequestLocale-presence + version-correct-middleware; non-zero on any failure [acceptance step 3]")
+    .description("the CI correctness gate: key-completeness + many-plural (pl/ar) + RTL + format + hreflang-graph + setRequestLocale-presence + version-correct-middleware; non-zero on any failure [acceptance step 3]")
     .argument("[dir]", "target app directory (alias for --dir)")
     .option("--dir <app>", "target app directory")
     .option("--locales <list>", "comma-separated locales", "")
